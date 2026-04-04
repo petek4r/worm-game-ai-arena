@@ -92,7 +92,17 @@ function drawWorm() {
 }
 
 function advanceWorm() {
-    const head = {x: worm[0].x + dx, y: worm[0].y + dy};
+    let headX = worm[0].x + dx;
+    let headY = worm[0].y + dy;
+
+    // Wrap around screen logic
+    if (headX < 0) headX = tileCount - 1;
+    else if (headX >= tileCount) headX = 0;
+
+    if (headY < 0) headY = tileCount - 1;
+    else if (headY >= tileCount) headY = 0;
+
+    const head = {x: headX, y: headY};
     worm.unshift(head);
 
     if (head.x === food.x && head.y === food.y) {
@@ -106,10 +116,6 @@ function advanceWorm() {
 
 function didGameEnd() {
     const head = worm[0];
-    // Wall collision
-    if (head.x < 0 || head.x >= tileCount || head.y < 0 || head.y >= tileCount) {
-        return true;
-    }
     // Self collision
     for (let i = 1; i < worm.length; i++) {
         if (head.x === worm[i].x && head.y === worm[i].y) {

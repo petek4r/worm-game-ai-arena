@@ -21,18 +21,54 @@
         h1 {
             color: #2e7d32;
         }
-        .score {
-            font-size: 24px;
-            margin-bottom: 10px;
-            color: #333;
+        // ... existing code ...
+           .score {
+               font-size: 24px;
+               margin-bottom: 10px;
+               color: #333;
+           }
+        .controls {
+            margin-top: 20px;
         }
-    </call>
-</style>
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #2e7d32;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+        button:hover {
+            background-color: #1b5e20;
+        }
+        #highScores {
+            margin-top: 20px;
+            width: 300px;
+            text-align: left;
+        }
+        .high-score-item {
+            display: flex;
+            justify-content: space-between;
+            border-bottom: 1px solid #ccc;
+            padding: 5px 0;
+        }
+    </style>
 </head>
 <body>
-    <h1>Gemma Worm Game</h1>
-    <div class="score" id="scoreBoard">Score: 0</div>
-    <canvas id="gameCanvas" width="400" height="400"></canvas>
-    <script src="script.js"></script>
+<h1>Gemma Worm Game</h1>
+<div class="score" id="scoreBoard">Score: 0</div>
+<canvas id="gameCanvas" width="400" height="400"></canvas>
+
+<div class="controls">
+    <button id="restartBtn">Restart Game</button>
+</div>
+
+<div id="highScores">
+    <h3>Top Scores</h3>
+    <div id="highScoresList"></div>
+</div>
+
+<script src="script.js"></script>
 </body>
 </html>

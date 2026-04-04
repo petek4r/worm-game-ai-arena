@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Gemma Worm Game</title>
+    <style>
+        body {
+            background-color: #e8f5e9;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+        canvas {
+            background-color: #fff;
+            box-shadow: 0 0 20px rgba(0,0,0,0.2);
+            border-radius: 5px;
+        }
+        h1 {
+            color: #2e7d32;
+        }
+        .score {
+            font-size: 24px;
+            margin-bottom: 10px;
+            color: #333;
+        }
+    </call>
+</style>
+</head>
+<body>
+    <h1>Gemma Worm Game</h1>
+    <div class="score" id="scoreBoard">Score: 0</div>
+    <canvas id="gameCanvas" width="400" height="400"></canvas>
+    <script src="script.js"></script>
+</body>
+</html>

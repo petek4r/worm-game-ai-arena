@@ -199,7 +199,7 @@ function saveHighScoreToCookies(newScore) {
     highScores.sort((a, b) => b.score - a.score);
     highScores = highScores.slice(0, 10);
 
-    document.cookie = `wormHighScores=${encodeURIComponent(JSON.stringify(highScores))}; path=/; max-age=31536000`;
+    document.cookie = `wormHighScores=${encodeURIComponent(JSON.stringify(highScores))}; max-age=31536000`;
 }
 
 function loadHighScoresFromCookies(onlyReturnData = false) {

@@ -1,0 +1,8 @@
+# .continueignore
+.git/
+.continue/
+node_modules/
+*.log
+*.tmp
+# try to write code based on Continue's own internal rules.
+config_schema.json

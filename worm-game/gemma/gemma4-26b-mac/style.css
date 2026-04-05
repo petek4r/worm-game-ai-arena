@@ -1,0 +1,131 @@
+body {
+    background-color: #0a0a0a;
+    color: #00ff41;
+    font-family: 'Courier New', Courier, monospace;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    overflow: hidden;
+}
+
+#game-container {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    border: 4px solid #00ff41;
+    box-shadow: 0 0 20px #00ff41;
+    background-color: #000;
+}
+
+#score-board {
+    margin-bottom: 10px;
+    font-size: 1.2rem;
+    text-shadow: 0 0 5px #00ff41;
+}
+
+canvas {
+    border: 2px solid #00ff41;
+    background-color: #000;
+}
+
+#overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 10;
+}
+
+#overlay.hidden {
+    display: none;
+}
+
+#overlay-text {
+    font-size: 3rem;
+    color: #ff003c;
+    text-shadow: 0 0 10px #ff003c;
+    margin-bottom: 20px;
+}
+
+#restart-btn {
+    padding: 10px 20px;
+    font-size: 1.5rem;
+    background: transparent;
+    color: #00ff41;
+    border: 2px solid #00ff41;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.3s;
+}
+
+#restart-btn:hover {
+    background: #00ff41;
+    color: #000;
+    box-shadow: 0 0 15px #00ff41;
+}
+
+#scanlines {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        rgba(18, 16, 16, 0) 50%,
+        rgba(0, 0, 0, 0.25) 50%
+    ), linear-gradient(
+        90deg,
+        rgba(255, 0, 0, 0.06),
+        rgba(0, 255, 0, 0.02),
+        rgba(0, 0, 255, 0.06)
+    );
+    background-size: 100% 4px, 3px 100%;
+    pointer-events: none;
+}
+#top-scores-container {
+    margin-top: 20px;
+    padding: 10px;
+    border: 2px solid #00ff41;
+    width: 100%;
+    font-family: 'Courier New', Courier, monospace;
+    box-shadow: 0 0 10px #00ff41;
+}
+
+.retro-title {
+    text-align: center;
+    color: #ff003c;
+    text-shadow: 0 0 5px #ff003c;
+    margin: 0 0 10px 0;
+    font-size: 1.2rem;
+}
+
+#high-scores-table {
+    width: 100%;
+    border-collapse: collapse;
+    color: #00ff41;
+}
+
+#high-scores-table th, #high-scores-table td {
+    padding: 5px;
+    text-align: left;
+    border-bottom: 1px solid #004411;
+}
+
+#high-scores-table th {
+    color: #00ff41;
+    text-shadow: 0 0 5px #00ff41;
+}
+
+.hidden {
+    display: none !important;
+}

@@ -1,0 +1,43 @@
+name: Worm Game Arena
+version: 1.0.0
+schema: v1
+
+models:
+  # --- GEMMA 4 26B MODELS ---
+  - name: Gemma 4 26B (PC)
+    provider: ollama
+    model: gemma4:26b
+    requestOptions:
+      # Keeps Gemma focused on the task without rambling
+      extraBodyProperties:
+        think: false
+    # The variable is swapped in at runtime!
+    apiBase: http://${{ secrets.REMOTE_PC_IP }}:11434
+    roles: [chat, edit, apply]
+  - name: Gemma 4 26B (Mac)
+    provider: ollama
+    model: gemma4:26b
+    requestOptions:
+      # Keeps Gemma focused on the task without rambling
+      extraBodyProperties:
+        think: false
+    apiBase: http://127.0.0.1:11434
+    roles: [chat, edit, apply]
+
+  # --- QWEN 3 8B MODELS ---
+  - name: Qwen3 8B (PC)
+    provider: ollama
+    model: qwen3:8b
+    apiBase: http://${{ secrets.REMOTE_PC_IP }}:11434
+    roles: [chat, autocomplete]
+  - name: Qwen3 8B (Mac)
+    provider: ollama
+    model: qwen3:8b
+    apiBase: http://127.0.0.1:11434
+    roles: [chat, autocomplete]
+
+context:
+  - provider: codebase
+  - provider: docs
+  - provider: folder
+  - provider: file

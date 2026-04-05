@@ -8,6 +8,8 @@ models:
     provider: ollama
     model: gemma4:26b
     requestOptions:
+      num_ctx: 8192      # Keep it small to stay in VRAM
+      kv_cache_type: q4_0 # Use 4-bit on PC to save even more space!
       # Keeps Gemma focused on the task without rambling
       extraBodyProperties:
         think: false
@@ -18,6 +20,9 @@ models:
     provider: ollama
     model: gemma4:26b
     requestOptions:
+      num_ctx: 32768
+      # 2026 Optimization: Force 8-bit cache to save ~11GB of RAM
+      kv_cache_type: q8_0
       # Keeps Gemma focused on the task without rambling
       extraBodyProperties:
         think: false

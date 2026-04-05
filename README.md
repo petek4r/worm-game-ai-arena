@@ -12,13 +12,20 @@ This project was built entirely using the following local AI development stack:
 - **[Ollama](https://ollama.com/)**: Used to run and serve the local LLMs (Gemma, Qwen) securely on personal hardware.
 - **[Continue](https://continue.dev/)**: An open-source AI code assistant plugin for IntelliJ/VS Code that connects directly to the local Ollama instances for coding, autocomplete, and chat.
 
-## Project Scope & The Iterative Process
+## ⏱️ Project Scope & Performance Tiers
 Please note that this repository showcases the **end-results** of an **iterative** AI-assisted development process.
 
 The models were not expected to generate a flawless game in a single, zero-shot attempt. Instead, I iterated with the results multiple times—prompting the LLMs to fix bugs, refine the wrap-around logic, and apply the shared audio engine to reach the final working state.
 
-This repository **does not** include statistics or metrics such as:
-- How long it took each model to finish the game.
+To objectively measure competence, each model run is time-boxed. The final game UI for each implementation will proudly display the specific performance tier that the model achieved:
+
+- 🏆 **Tier 1 (Speedrun) - Under 15 Minutes:** The model nailed the logic, implemented the UI/audio rules, and fixed its bugs almost instantly.
+- 🥈 **Tier 2 (Professional) - Under 30 Minutes:** The model required a few iterative debugging cycles but reached a fully functional state within a standard workflow timeframe.
+- 🥉 **Tier 3 (Iterative Limit) - Under 60 Minutes:** The model struggled with cross-file dependencies or logic loops but eventually crossed the finish line. *(Note: Weaker/smaller LLMs often struggle to write proper code in 15 mins, making this 60-minute limit necessary for a fair test).*
+- ❌ **Failure - 60+ Minutes:** If the model cannot produce a working game within an hour, the run is terminated.
+
+This repository **does not** include granular statistics or metrics such as:
+- The exact second-by-second duration of each run (only the broad tiers above are recorded).
 - The exact number of prompts or conversational turns required to reach the final state.
 - Token generation speeds or precise hardware utilization metrics during development.
 
@@ -57,6 +64,11 @@ However, you are highly encouraged to use this repository as a baseline for your
 3. Review my prompt plan in [`TASK.md`](TASK.md).
 4. Navigate into a specific model folder (e.g., `worm-game/gemma/gemma4-26b-pc/`) to review the baseline code and open `index.html` in your browser.
 5. Create your own folders (e.g., `worm-game/llama3/llama3-8b-mac/`) and test how other models handle the task!
+
+### Prerequisites
+To replicate or expand this testing arena, you will need:
+- **[Ollama](https://ollama.com/)** installed and running.
+- The specific models used in this project (e.g., `ollama pull gemma4:26b` or `ollama pull qwen3:8b`).
 
 ## License
 This project is licensed under the MIT License. See the LICENSE file for more details.

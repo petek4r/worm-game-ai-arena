@@ -1,0 +1,80 @@
+/* Retro Arcade Styling */
+body {
+    background-color: #000; /* Pure Black Background */
+    color: #0f0; /* Neon Green Accent */
+    font-family: 'Courier New', 'Lucida Console', monospace; /* Monospace Font */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    padding: 20px;
+    /* Scanline Overlay Effect */
+    background-image: repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.2) 0px, rgba(0, 0, 0, 0.2) 1px, transparent 1px, transparent 2px); 
+}
+
+#game-container {
+    text-align: center;
+    padding: 20px;
+    border: 3px dashed #0ff; /* Neon Cyan Border */
+    box-shadow: 0 0 20px rgba(0, 255, 255, 0.5); /* Glow Effect */
+    background-color: rgba(0, 0, 0, 0.8);
+}
+
+#gameCanvas {
+    background-color: #000;
+    border: 2px solid #0f0; 
+    display: block;
+    margin: 20px auto;
+    box-shadow: 0 0 15px #0f0;
+}
+
+/* Scoreboard and Text Styling */
+#score-board, #message-content h2 {
+    color: #ff00ff; /* Neon Pink Accent for titles/scores */
+    margin-bottom: 15px;
+}
+
+#score-list li {
+    padding: 5px 0;
+    border-bottom: 1px dotted #004d00;
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.9em;
+}
+
+/* Overlay Styles */
+#message-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.9);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10;
+}
+
+#message-overlay.hidden { 
+    display: none;
+}
+
+#restart-button {
+    background-color: #0f0; /* Neon Green */
+    color: #000; 
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 1.1em;
+    margin-top: 20px;
+    box-shadow: 0 0 10px #0f0;
+    transition: background-color 0.2s;
+}
+
+#restart-button:hover {
+    background-color: #0d0;
+    box-shadow: 0 0 15px #0f0;
+}

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gemma Worm Game</title>
+    <!-- Required shared audio library -->
+    <script src="../../shared/sounds.js"></script>
+    <script>
+        window.ARENA_STATUS = {
+            tier: "FAILURE",
+            model: "Gemma 4 E4B",
+            environment: "Mac (M4 Max)",
+            timeTaken: "+60 mins (Failed)"
+        };
+    </script>
+    <script src="../../shared/status.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="game-container">
+    <h1>Worm Game</h1>
+    <div id="score-board">
+        Score: <span id="score">0</span> | High Score: <span id="high-score">0</span>
+    </div>
+    <!-- Added status element for feedback -->
+    <div id="status" style="text-align: center; margin-bottom: 10px;">Press Start</div>
+
+    <canvas id="gameCanvas"></canvas>
+
+    <div id="message-overlay" class="hidden">
+        <div id="message-content">
+            <p id="final-message">Game Over!</p>
+            <!-- Changed ID to match script logic -->
+            <button id="restart-button">Play Again</button>
+        </div>
+    </div>
+
+    <div id="top-scores">
+        <h2 class="retro-title">Top 5 Scores</h2>
+        <ol id="score-list">
+            <!-- Scores will be populated here by script.js -->
+        </ol>
+    </div>
+
+    <!-- NEW: Primary Start Button -->
+    <button id="start-button" style="margin: 20px auto; display: block;">Start Game</button>
+</div>
+
+<!-- IMPORTANT: Script MUST come after the shared sound script -->
+<script src="script.js"></script>
+</body>
+</html>

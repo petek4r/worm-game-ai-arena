@@ -18,12 +18,19 @@ Create a worm game that works in a web browser. The implementation must include 
 - **Wrap-around Logic:** The worm can pass through the edges of the screen and appear on the opposite side (no
   wall-collision death).
 - **Failure Condition:** The game should end only when the worm collides with its own body.
-- **Scoring & Persistence:** A basic scoring system to track the current score, and a high-score system that persists data using localStorage. Table for top-5 scores with date and time.
+- **Scoring & Persistence:** A basic scoring system to track the current score, and a high-score system that persists
+  data using localStorage. Table for top-5 scores with date and time.
 - **Aesthetic:** The UI and styling should have a "retro" arcade feel (e.g., dark backgrounds, neon/glowing colors,
-  monospace fonts, scanlines). 
+  monospace fonts, scanlines).
 - **Audio:** A shared audio library already exists at `../../shared/sounds.js`. You must include this script in your
   `index.html` and use its globally available `playRetroBeep(frequency, duration, type)` function for game sounds (e.g.,
   eating food, moving, game over). Do not write your own Web Audio API logic.
+- **Model Watermark & Status:** The game UI must include a performance badge using the shared status library. In your
+  `index.html` `<head>`, define a global `window.ARENA_STATUS` object containing your details (e.g.,
+  `model: "Gemma 4 26B"` and `environment: "Mac (M4 Max)"`). Immediately after this script block, include
+  `<script src="../../shared/status.js"></script>`. Do not include `tier`, `timeTaken`, or `date` parameters (they
+  default automatically), and do not write your own CSS or HTML for the watermark; the shared script handles all
+  rendering.
 - All implementations must strictly follow the laws defined in `.continue/rules/`
 
 ## Project Structure

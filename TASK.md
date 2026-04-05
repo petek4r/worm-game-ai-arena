@@ -14,6 +14,7 @@ architectural choices and code quality.
 Create a worm game that works in a web browser. The implementation must include the following features:
 
 - **Core Mechanics:** A snake-like worm that moves around a grid and grows longer when it eats food.
+- **Game Flow & Overlays:** The game must not start automatically. It must feature a "Start Game" button to begin. When the game ends, it must display a distinct "Game Over" layout/overlay that includes a button to play again (restart the game).
 - **Controls:** The ability to control the worm using standard keyboard inputs (Arrow keys / WASD).
 - **Wrap-around Logic:** The worm can pass through the edges of the screen and appear on the opposite side (no
   wall-collision death).

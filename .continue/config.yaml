@@ -41,6 +41,22 @@ models:
     apiBase: http://127.0.0.1:11434
     roles: [chat, autocomplete]
 
+  - name: Qwen3.5 9B (Mac)
+    provider: ollama
+    model: qwen3.5:9b
+    apiBase: http://127.0.0.1:11434
+    roles: [ chat, autocomplete, edit ]
+    contextLength: 16384
+    maxTokens: 8192
+    completionOptions:
+      temperature: 0.15
+      topP: 0.9
+    requestOptions:
+      extraBodyProperties:
+        options:
+          num_ctx: 16384
+          kv_cache_type: "q8_0"
+
 context:
   - provider: codebase
   - provider: docs

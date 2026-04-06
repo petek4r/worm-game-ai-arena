@@ -16,6 +16,7 @@ models:
     # The variable is swapped in at runtime!
     apiBase: http://${{ secrets.REMOTE_PC_IP }}:11434
     roles: [chat, edit, apply]
+    capabilities: [ tool_use ]
   - name: Gemma 4 26B (Mac)
     provider: ollama
     model: gemma4:26b
@@ -28,6 +29,7 @@ models:
         think: false
     apiBase: http://127.0.0.1:11434
     roles: [chat, edit, apply]
+    capabilities: [ tool_use ]
 
   # --- QWEN 3 8B MODELS ---
   - name: Qwen3 8B (PC)
@@ -40,12 +42,15 @@ models:
     model: qwen3:8b
     apiBase: http://127.0.0.1:11434
     roles: [chat, autocomplete]
+    capabilities: [ tool_use ]
+
 
   - name: Qwen3.5 9B (Mac)
     provider: ollama
     model: qwen3.5:9b
     apiBase: http://127.0.0.1:11434
     roles: [ chat, autocomplete, edit ]
+    capabilities: [ tool_use ]
     contextLength: 16384
     maxTokens: 8192
     completionOptions:

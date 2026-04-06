@@ -23,7 +23,7 @@ Create a worm game that works in a web browser. The implementation must include 
   data using localStorage. Table for top-5 scores with date and time.
 - **Aesthetic:** The UI and styling should have a "retro" arcade feel (e.g., dark backgrounds, neon/glowing colors,
   monospace fonts, scanlines).
-- **Audio:** A shared audio library already exists at `../../shared/sounds.js`. You must include this script in your
+- **Audio:** A shared audio library already exists at `../../shared/sound.js`. You must include this script in your
   `index.html` and use its globally available `playRetroBeep(frequency, duration, type)` function for game sounds (e.g.,
   eating food, moving, game over). Do not write your own Web Audio API logic.
 - **Model Watermark & Status:** The game UI must include a performance badge using the shared status library. In your

@@ -2,25 +2,49 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Gemma Arcade: Worm Edition</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neon Snake</title>
     <link rel="stylesheet" href="style.css">
+    <script>
+        window.ARENA_STATUS = {
+            model: "Gemma 4 26B",
+            environment: "PC",
+            tier: "TIER_3",
+            timeTaken: "~40 mins",
+            date: "2026-04-06"
+        };
+    </script>
+    <script src="../../shared/status.js"></script>
+    <script src="../../shared/sound.js"></script>
 </head>
-<body class="arcade-body">
-<h1 class="arcade-title">GEMMA WORM</h1>
-<div class="score-display" id="scoreBoard">SCORE: 0</div>
+<body>
+<div class="container">
+    <div class="score-board">
+        <span>SCORE: <span id="current-score">0</span></span>
+        <span>HIGH SCORE: <span id="high-score">0</span></span>
+    </div>
 
-<div id="gameContainer">
-    <canvas id="gameCanvas" width="400" height="400"></canvas>
+    <div class="game-container">
+        <canvas id="gameCanvas" width="400" height="400"></canvas>
+
+        <!-- Overlay for Start/Game Over -->
+        <div id="overlay" class="overlay">
+            <div class="overlay-cont">
+                <h1 id="overlay-title">NEON SNAKE</h1>
+                <p id="overlay-message">Press SPACE or Click to Start</p>
+                <button id="start-btn">START GAME</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="score-board">
+        <div style="margin-top: 10px; font-size: 0.8em; color: #0f0;">
+            TOP 5:
+            <ul id="high-score-list" style="list-style: none; padding: 0; margin: 0;"></ul>
+        </div>
+    </div>
 </div>
 
-<div class="controls">
-    <button id="restartBtn">RESTART</button>
-</div>
-
-<div id="highScoresContainer">
-    <h3>TOP SCORES</h3>
-    <div id="highScoresList"></div>
-</div>
-</body>
 <script src="script.js"></script>
+</body>
 </html>

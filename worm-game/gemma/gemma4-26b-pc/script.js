@@ -1,238 +1,179 @@
 const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
-const scoreElement = document.getElementById('scoreBoard');
-const highScoresListElement = document.getElementById('highScoresList');
-const restartBtn = document.getElementById('restartBtn');
+const scoreEl = document.getElementById('current-score');
+const highScoreEl = document.getElementById('high-score');
+const highScoreListEl = document.getElementById('high-score-list');
+const overlay = document.getElementById('overlay');
+const overlayTitle = document.getElementById('overlay-title');
+const overlayMsg = document.getElementById('overlay-message');
+const startBtn = document.getElementById('start-btn');
 
-// Game constants
+// Game Constants
 const gridSize = 20;
 const tileCount = canvas.width / gridSize;
 
-// Game state
-let score = 0;
-let worm = [];
-let food = {x: 5, y: 5};
+// Game State
+let snake = [];
+let food = { x: 5, y: 5 };
 let dx = 0;
 let dy = 0;
-let nextDirection = {dx: 0, dy: -1};
-let gameTimeout = null;
+let score = 0;
+let highScore = localStorage.getItem('wormHighScore') || 0;
+let gameLoopInterval = null;
+let isPaused = true;
 
-// Initialize game
-function init() {
-    // Prevent scrolling with arrow keys
-    document.addEventListener('keydown', (e) => {
-        if ([37, 38, 39, 40, 87, 65, 83, 68].includes(e.keyCode)) {
-            e.preventDefault();
-        }
-    });
+// Initialize High Score UI
+highScoreEl.innerText = highScore;
+updateHighScoreList();
 
-    document.addEventListener('keydown', changeDirection);
+// Event Listeners
+document.addEventListener('keydown', handleKeyPress);
+startBtn.addEventListener('click', startGame);
 
-    if (restartBtn) {
-        restartBtn.addEventListener('click', resetGame);
-    }
-
-    loadHighScoresFromCookies();
-    resetGame();
-}
-
-function resetGame() {
-    if (gameTimeout) clearTimeout(gameTimeout);
-        score = 0;
-        updateScore();
-        worm = [
-            { x: 10, y: 10 },
-            { x: 10, y: 11 },
-            { x: 10, y: 12 }
-        ];
-    dx = 0;
-    dy = -1;
-    nextDirection = {dx: 0, dy: -1};
-    createFood();
-    gameLoop();
-}
-
-function gameLoop() {
-    if (didGameEnd()) {
-        saveHighScoreToCookies(score);
-        loadHighScoresFromCookies();
-        // Use a slight delay so the user sees the final frame before the alert
-        setTimeout(() => {
-            alert(`MISSION FAILED\nSCORE: ${score}`);
-            resetGame();
-        }, 100);
+function handleKeyPress(e) {
+    if (isPaused && (e.code === 'Space' || e.code === 'Enter')) {
+        startGame();
         return;
     }
 
-    gameTimeout = setTimeout(function onTick() {
-        // Apply the buffered direction
-        dx = nextDirection.dx;
-        dy = nextDirection.dy;
-
-        clearCanvas();
-        drawFood();
-        advanceWorm();
-        drawWorm();
-        gameLoop();
-    }, 100);
+    const key = e.key;
+    // Prevent reversing direction
+    if ((key === 'ArrowUp' || key === 'w') && dy !== 1) { dx = 0; dy = -1; window.playMoveSound(); }
+    if ((key === 'ArrowDown' || key === 's') && dy !== -1) { dx = 0; dy = 1; window.playMoveSound(); }
+    if ((key === 'ArrowLeft' || key === 'a') && dx !== 1) { dx = -1; dy = 0; window.playMoveSound(); }
+    if ((key === 'ArrowRight' || key === 'd') && dx !== -1) { dx = 1; dy = 0; window.playMoveSound(); }
 }
 
-function clearCanvas() {
-    ctx.fillStyle = '#000';
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
+function startGame() {
+    // Reset state
+    snake = [{ x: 10, y: 10 }, { x: 10, y: 11 }, { x: 10, y: 12 }];
+    dx = 0;
+    dy = -1;
+    score = 0;
+    scoreEl.innerText = score;
+    isPaused = false;
+    overlay.style.display = 'none';
+
+    if (gameLoopInterval) clearInterval(gameLoopInterval);
+    gameLoopInterval = setInterval(gameUpdate, 100);
 }
 
-function drawWorm() {
-    ctx.fillStyle = '#0f0';
-    worm.forEach((part, index) => {
-        // Make the head a slightly different color
-        ctx.fillStyle = index === 0 ? '#0f0' : '#0a0';
-        ctx.fillRect(part.x * gridSize, part.y * gridSize, gridSize - 2, gridSize - 2);
-    });
+function gameUpdate() {
+    moveSnake();
+    if (checkGameOver()) return;
+    checkFoodCollision();
+    draw();
 }
 
-function advanceWorm() {
-    let headX = worm[0].x + dx;
-    let headY = worm[0].y + dy;
+function moveSnake() {
+    const head = { x: snake[0].x + dx, y: snake[0].y + dy };
 
-    // Wrap around screen logic
-    if (headX < 0) headX = tileCount - 1;
-    else if (headX >= tileCount) headX = 0;
+    // Wrap-around Logic
+    if (head.x < 0) head.x = tileCount - 1;
+    if (head.x >= tileCount) head.x = 0;
+    if (head.y < 0) head.y = tileCount - 1;
+    if (head.y >= tileCount) head.y = 0;
 
-    if (headY < 0) headY = tileCount - 1;
-    else if (headY >= tileCount) headY = 0;
-
-    const head = {x: headX, y: headY};
-    worm.unshift(head);
-
+    snake.unshift(head);
+    // Remove tail unless food eaten
     if (head.x === food.x && head.y === food.y) {
         score += 10;
-        updateScore();
-        createFood();
+        scoreEl.innerText = score;
+        window.playEatSound();
+        generateFood();
     } else {
-        worm.pop();
+        snake.pop();
     }
 }
 
-function didGameEnd() {
-    const head = worm[0];
-    // Self collision
-    for (let i = 1; i < worm.length; i++) {
-        if (head.x === worm[i].x && head.y === worm[i].y) {
+function checkFoodCollision() {
+    // Handled in moveSnake for growth
+}
+
+function generateFood() {
+    food.x = Math.floor(Math.random() * tileCount);
+    food.y = Math.floor(Math.random() * tileCount);
+    // Ensure food doesn't spawn on snake
+    if (snake.some(segment => segment.x === food.x && segment.y === food.y)) {
+        generateFood();
+    }
+}
+
+function checkGameOver() {
+    // Check self-collision
+    for (let i = 1; i < snake.length; i++) {
+        if (snake[i].x === snake[0].x && snake[i].y === snake[0].y) {
+            handleGameOver();
             return true;
         }
     }
     return false;
 }
 
-function createFood() {
-    food = {
-        x: Math.floor(Math.random() * tileCount),
-        y: Math.floor(Math.random() * tileCount)
-    };
-    // Ensure food doesn't spawn on worm
-    if (worm.some(part => part.x === food.length && part.y === food.y)) {
-        createFood();
-    }
+function handleGameOver() {
+    isPaused = true;
+    clearInterval(gameLoopInterval);
+    window.playGameOverSound();
+
+    overlayTitle.innerText = "GAME OVER";
+    overlayMsg.innerText = `Final Score: ${score}`;
+    overlay.style.display = 'flex';
+    startBtn.innerText = "RETRY";
+
+    saveScore(score);
 }
 
-// Corrected check for food collision
-function createFoodFixed() {
-    food = {
-        x: Math.floor(Math.random() * tileCount),
-        y: Math.floor(Math.random() * tileCount)
-    };
-    if (worm.some(part => part.x === food.x && part.y === food.y)) {
-        createFoodFixed();
+function saveScore(newScore) {
+    if (newint(newScore) > parseInt(highScore)) {
+        highScore = newScore;
+        localStorage.setItem('wormHighScore', highScore);
+        highScoreEl.innerText = highScore;
     }
-}
 
-function drawFood() {
-    ctx.fillStyle = '#f00';
-    ctx.fillRect(food.x * gridSize, food.y * gridSize, gridSize - 2, gridSize - 2);
-}
-
-function changeDirection(e) {
-    const keyPressed = e.keyCode;
-    const LEFT = 37, UP = 38, RIGHT = 39, DOWN = 40;
-    const W = 87, A = 65, S = 83, D = 68;
-
-    const goingUp = dy === -1;
-    const goingDown = dy === 1;
-    const goingRight = dx === 1;
-    const goingLeft = dx === -1;
-
-    if ((keyPressed === LEFT || keyPressed === A) && !goingRight) {
-        nextDirection = {dx: -1, dy: 0};
-    }
-    if ((keyPressed === UP || keyPressed === W) && !goingDown) {
-        nextDirection = {dx: 0, dy: -1};
-    }
-    if ((keyPressed === RIGHT || keyPressed === D) && !goingLeft) {
-        nextDirection = {dx: 1, dy: 0};
-    }
-    if ((keyPressed === DOWN || keyPressed === S) && !goingUp) {
-        nextDirection = {dx: 0, dy: 1};
-    }
-}
-
-function updateScore() {
-    if (scoreElement) scoreElement.innerText = `SCORE: ${score}`;
-}
-
-function saveHighScoreToCookies(newScore) {
-    if (newScore <= 0) return;
-
-    let highScores = loadHighScoresFromCookies(true);
-
-    const now = new Date();
-    const timestamp = now.getHours().toString().padStart(2, '0') + ":" +
-        now.getMinutes().toString().padStart(2, '0') + ":" +
-        now.getSeconds().toString().padStart(2, '0');
-
+    // Top 5 Persistence
+    let history = JSON.parse(localStorage.getItem('wormHistory')) || [];
     const entry = {
         score: newScore,
-        time: timestamp
+        date: new Date().toLocaleString()
     };
+    history.push(entry);
+    // Sort by score descending, then date descending
+    history.sort((a, b) => b.score - a.score || new Date(b.date) - new Date(a.date));
+    history = history.slice(0, 5);
+    localStorage.setItem('wormHistory', JSON.stringify(history));
 
-    highScores.push(entry);
-    highScores.sort((a, b) => b.score - a.score);
-    highScores = highScores.slice(0, 10);
-
-    document.cookie = `wormHighScores=${encodeURIComponent(JSON.stringify(highScores))}; max-age=31536000`;
+    updateHighScoreList();
 }
 
-function loadHighScoresFromCookies(onlyReturnData = false) {
-    const nameEQ = "wormHighScores=";
-    const ca = document.cookie.split(';');
-    let scores = [];
-
-    for (let i = 0; i < ca.length; i++) {
-        let c = ca[i].trim();
-        if (c.indexOf(nameEQ) === 0) {
-            try {
-                const cookieValue = c.substring(nameEQ.length, c.length);
-                scores = JSON.parse(decodeURIComponent(cookieValue));
-            } catch (e) {
-                console.error("Error parsing high scores cookie", e);
-                scores = [];
-            }
-            break;
-        }
-    }
-
-    if (!onlyReturnData && highScoresListElement) {
-        highScoresListElement.innerHTML = '';
-        scores.forEach(item => {
-            const div = document.createElement('div');
-            div.className = 'high-score-item';
-            div.innerHTML = `<span class="score-val">${item.score}</span><span class="hs-date">${item.time}</span>`;
-            highScoresListElement.appendChild(div);
-        });
-    }
-
-    return scores;
+function updateHighScoreList() {
+    const history = JSON.parse(localStorage.getItem('wormHistory')) || [];
+    highScoreListEl.innerHTML = history
+        .map(item => `<li>${item.score} - <small>${item.date}</small></li>`)
+        .join('');
 }
 
-// Start the game
-init();
+function draw() {
+    // Clear Canvas
+    ctx.fillStyle = '#000';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    // Draw Food
+    ctx.fillStyle = '#f0f'; // Neon Pink
+    ctx.shadowBlur = 15;
+    ctx.shadowColor = '#f0f';
+    ctx.fillRect(food.x * gridSize, food.y * gridSize, gridSize - 2, gridSize - 2);
+
+    // Draw Snake
+    snake.forEach((segment, index) => {
+        ctx.fillStyle = index === 0 ? '#0ff' : '#0f0'; // Head is Cyan, Body is Green
+        ctx.shadowBlur = index === 0 ? 15 : 5;
+        ctx.shadowColor = index === 0 ? '#0ff' : '#0f0';
+        ctx.fillRect(segment.x * gridSize, segment.y * gridSize, gridSize - 2, gridSize - 2);
+    });
+
+    // Reset shadow so it doesn't affect other UI elements or next frames
+    ctx.shadowBlur = 0;
+}
+
+// Helper to prevent errors in logic
+function newint(v) { return parseInt(v); }

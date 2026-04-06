@@ -6,33 +6,46 @@ This directory contains various implementations of the Worm (Snake) game, genera
 
 The structure follows a **Model Family > Specific Model** hierarchy:
 
-- `shared/`: Contains shared assets used across all implementations (e.g., `sounds.js`).
+- `shared/`: Contains shared assets used across all implementations (e.g., `sounds.js`, `status.js`).
 - `gemma/`: Implementations from the Gemma model family.
   - `gemma4-26b-pc/`: Implementation by Gemma 4 (26B) on PC hardware.
   - `gemma4-26b-mac/`: Implementation by Gemma 4 (26B) on Apple Silicon.
-- `qwen/`: Implement/ations from the Qwen model family.
+- `qwen/`: Implementations from the Qwen model family.
   - `qwen3-8b-pc/`: Implementation by Qwen 3 (8B) on PC hardware.
+
+## The Arena Dashboard
+
+To make navigating and comparing the different runs easier, this directory features an auto-generated retro-arcade dashboard (`index.html`). 
+
+### Updating the Dashboard
+Whenever you add a new LLM test run to the arena (e.g., a new folder like `llama3/llama3-8b-mac`), you must update the dashboard so the new game appears on the list. We use a lightweight bash script that automatically scans the folders, categorizes them by OS environment (Mac/PC), and sorts them.
+
+To regenerate the root `index.html` dashboard, simply run:
+```bash
+./generate_dashboard.sh
+```
+*(Once generated, just open `index.html` in your browser to view the updated list!)*
 
 ## How to Run
 
-You can use the provided helper script to quickly launch a version of the game in your default web browser.
+You can use the provided helper script to quickly launch a version of the game in your default web browser, or launch them directly from the Arena Dashboard mentioned above.
 
 ### Using the Helper Script
 
 ```bash
-./worm-game/open_game.sh [version_folder]
+./open_game.sh [version_folder]
 ```
 
 **Examples:**
 
 - **Launch default version:**
   ```bash
-  ./worm-game/open_game.sh
+  ./open_game.sh
   ```
 
 - **Launch a specific version:**
   ```bash
-  ./worm-game/open_game.sh gemma4-26b-mac
+  ./open_game.sh gemma4-26b-mac
   ```
 
 ### Manual Launch
@@ -41,5 +54,5 @@ Navigate to the desired model folder and open the `index.html` file in any moder
 
 Example:
 ```bash
-open worm-game/gemma/gemma4-26b-pc/index.html
+open gemma/gemma4-26b-pc/index.html
 ```
